@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const TODOApp());
+  runApp(const ToDoApp());
 }
 
-class TODOApp extends StatelessWidget {
-  const TODOApp({super.key});
+class ToDoApp extends StatelessWidget {
+  const ToDoApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -24,21 +24,71 @@ class TODOApp extends StatelessWidget {
 }
 
 class MainPage extends StatelessWidget {
-  const MainPage({
+  MainPage({
     super.key,
   });
 
+  final msgs = [
+    "Lorem Ipsum 1",
+    "Lorem Ipsum 2",
+    "Lorem Ipsum 3",
+    "Lorem Ipsum 4",
+    "Lorem Ipsum 5",
+    "Lorem Ipsum 6",
+    "Lorem Ipsum 7",
+    "Lorem Ipsum 8",
+    "Lorem Ipsum 9",
+    "Lorem Ipsum 10",
+    "Lorem Ipsum 11",
+    "Lorem Ipsum 12",
+    "Lorem Ipsum 13",
+    "Lorem Ipsum 14",
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainPageAppBar(),
-      floatingActionButton: AddTODOItemButton(),
+      body: ListView(
+        children: msgs.map((msg) => TodoCard(msg: msg)).toList(),
+      ),
+      floatingActionButton: AddTodoItemButton(),
     );
   }
 }
 
-class AddTODOItemButton extends StatelessWidget {
-  const AddTODOItemButton({
+class TodoCard extends StatelessWidget {
+  TodoCard({super.key, required this.msg});
+
+  final String msg;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            leading: IconButton(
+              onPressed: () => {},
+              icon: Icon(
+                Icons.check_box_outline_blank,
+              ),
+            ),
+            title: Text(msg),
+            trailing: IconButton(
+                onPressed: () => {
+                      // Remove todo
+                    },
+                icon: Icon(Icons.close)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddTodoItemButton extends StatelessWidget {
+  const AddTodoItemButton({
     super.key,
   });
 
@@ -47,7 +97,7 @@ class AddTODOItemButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () => {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const AddToDoItem()),
+          MaterialPageRoute(builder: (context) => const AddToDoItemPage()),
         ),
       },
       tooltip: 'Add to-do item',
@@ -88,8 +138,8 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class AddToDoItem extends StatelessWidget {
-  const AddToDoItem({
+class AddToDoItemPage extends StatelessWidget {
+  const AddToDoItemPage({
     super.key,
   });
 
@@ -116,7 +166,8 @@ class AddToDoItem extends StatelessWidget {
           ),
           ElevatedButton.icon(
             onPressed: () => {
-              // TODO add a new card
+              // TODO add a new card and display
+              Navigator.of(context).pop()
             },
             icon: const Icon(Icons.add),
             label: Text("ADD"),
