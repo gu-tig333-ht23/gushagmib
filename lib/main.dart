@@ -11,19 +11,20 @@ class TODOApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'My todo list',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 68, 252, 68)),
         useMaterial3: true,
       ),
-      home: mainPage(),
+      home: MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class mainPage extends StatelessWidget {
-  const mainPage({
+class MainPage extends StatelessWidget {
+  const MainPage({
     super.key,
   });
 
@@ -31,6 +32,26 @@ class mainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainPageAppBar(),
+      floatingActionButton: AddTODOItemButton(),
+    );
+  }
+}
+
+class AddTODOItemButton extends StatelessWidget {
+  const AddTODOItemButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () => {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const AddToDoItem()),
+        ),
+      },
+      tooltip: 'Add to-do item',
+      child: const Icon(Icons.add),
     );
   }
 }
@@ -43,23 +64,21 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const whiteColor = Colors.white;
     return AppBar(
       title: Center(
         child: Text(
           "My to-do list",
-          style: TextStyle(color: whiteColor),
         ),
       ),
       actions: <Widget>[
         PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
-            itemBuilder: (context) => <PopupMenuEntry>[
-                  const PopupMenuItem(child: Text("all")),
-                  const PopupMenuItem(child: Text("done")),
-                  const PopupMenuItem(child: Text("undone")),
-                ],
-            color: whiteColor),
+          icon: const Icon(Icons.more_vert),
+          itemBuilder: (context) => <PopupMenuEntry>[
+            const PopupMenuItem(child: Text("all")),
+            const PopupMenuItem(child: Text("done")),
+            const PopupMenuItem(child: Text("undone")),
+          ],
+        ),
       ],
       backgroundColor: theme.colorScheme.primary,
     );
@@ -67,4 +86,43 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class AddToDoItem extends StatelessWidget {
+  const AddToDoItem({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "My to-do list",
+          // style: TextStyle(color: whiteColor),
+        ),
+        backgroundColor: theme.colorScheme.primary,
+      ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+            child: TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'What are you going to do?'),
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => {
+              // TODO add a new card
+            },
+            icon: const Icon(Icons.add),
+            label: Text("ADD"),
+          ),
+        ],
+      ),
+    );
+  }
 }
