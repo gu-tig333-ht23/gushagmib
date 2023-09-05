@@ -1,27 +1,11 @@
 import 'package:flutter/material.dart';
+//import 'package:template/blackTheme.dart';
 import 'addItemPage.dart';
+import 'themes/lightPurpleTheme.dart';
+import 'data.dart';
 
 void main() {
   runApp(const ToDoApp());
-}
-
-class ToDoItem {
-  String _text;
-  bool _isDone = false;
-
-  ToDoItem(this._text);
-
-  String getText() {
-    return _text;
-  }
-
-  void setBool(bool isDone) {
-    _isDone = isDone;
-  }
-
-  bool getBool() {
-    return _isDone;
-  }
 }
 
 class ToDoApp extends StatelessWidget {
@@ -32,11 +16,7 @@ class ToDoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My todo list',
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 68, 252, 68)),
-        useMaterial3: true,
-      ),
+      theme: lightTheme(),
       home: MainPage(),
       debugShowCheckedModeBanner: false,
     );
@@ -66,13 +46,11 @@ class MainPage extends StatelessWidget {
 }
 
 class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainPageAppBar({
+  MainPageAppBar({
     super.key,
   });
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return AppBar(
       title: Center(
         child: Text(
@@ -89,7 +67,7 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ],
-      backgroundColor: theme.colorScheme.primary,
+      // backgroundColor: theme.colorScheme.primary,
     );
   }
 
@@ -101,8 +79,11 @@ class TodoCard extends StatelessWidget {
   const TodoCard({super.key, required this.item});
 
   final ToDoItem item;
+
   @override
   Widget build(BuildContext context) {
+    var textStyleTheme = Theme.of(context).textTheme.bodyMedium;
+
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -114,13 +95,8 @@ class TodoCard extends StatelessWidget {
                 Icons.check_box_outline_blank,
               ),
             ),
-            title: Text(item.getText()),
-            trailing: IconButton(
-                onPressed: () => {
-                      // Remove todo
-                      print(item._isDone)
-                    },
-                icon: Icon(Icons.close)),
+            title: Text(item.getText(), style: textStyleTheme),
+            trailing: IconButton(onPressed: () => {}, icon: Icon(Icons.close)),
           ),
         ],
       ),
