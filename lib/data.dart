@@ -8,11 +8,11 @@ class ToDoItem {
     return _text;
   }
 
-  void setBool(bool isDone) {
+  void setIsDone(bool isDone) {
     _isDone = isDone;
   }
 
-  bool getBool() {
+  bool getIsDone() {
     return _isDone;
   }
 }

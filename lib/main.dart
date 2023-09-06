@@ -75,14 +75,19 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class TodoCard extends StatelessWidget {
+class TodoCard extends StatefulWidget {
   const TodoCard({super.key, required this.item});
 
   final ToDoItem item;
 
   @override
+  State<TodoCard> createState() => _TodoCardState();
+}
+
+class _TodoCardState extends State<TodoCard> {
+  @override
   Widget build(BuildContext context) {
-    var textStyleTheme = Theme.of(context).textTheme.bodyMedium;
+    var textStyleTheme = Theme.of(context).textTheme.bodyMedium!;
 
     return Card(
       child: Column(
@@ -90,12 +95,28 @@ class TodoCard extends StatelessWidget {
         children: [
           ListTile(
             leading: IconButton(
-              onPressed: () => {},
-              icon: Icon(
-                Icons.check_box_outline_blank,
-              ),
+              onPressed: () => {
+                setState(
+                  () {
+                    if (widget.item.getIsDone()) {
+                      // Set to false since user tapped box
+                      widget.item.setIsDone(false);
+                    } else {
+                      widget.item.setIsDone(true);
+                    }
+                  },
+                ),
+              },
+              icon: Icon(widget.item.getIsDone()
+                  ? Icons.check_box_outlined
+                  : Icons.check_box_outline_blank),
             ),
-            title: Text(item.getText(), style: textStyleTheme),
+            title: Text(widget.item.getText(),
+                style: textStyleTheme.copyWith(
+                  decoration: widget.item.getIsDone()
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                )),
             trailing: IconButton(onPressed: () => {}, icon: Icon(Icons.close)),
           ),
         ],
