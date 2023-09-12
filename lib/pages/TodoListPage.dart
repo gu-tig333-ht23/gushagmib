@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:template/states/TaskCollectionState.dart';
 //import 'package:template/blackTheme.dart';
 import 'addItemPage.dart';
 import '../themes/lightPurpleTheme.dart';
 import '../TodoItem.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const ToDoApp());
@@ -14,12 +16,14 @@ class ToDoApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My todo list',
-      theme: lightTheme(),
-      home: MainPage(),
-      debugShowCheckedModeBanner: false,
-    );
+    return ChangeNotifierProvider(
+        create: (context) => TaskCollectionState(),
+        child: MaterialApp(
+          title: 'My todo list',
+          theme: lightTheme(),
+          home: MainPage(),
+          debugShowCheckedModeBanner: false,
+        ));
   }
 }
 
@@ -28,17 +32,17 @@ class MainPage extends StatelessWidget {
     super.key,
   });
 
-  final items = [
-    ToDoItem("Lorem Ipsum 1"),
-    ToDoItem("Lorem Ipsum 2"),
-    ToDoItem("Lorem Ipsum 3"),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView(
-        children: items.map((item) => TodoCard(item: item)).toList(),
+        // Spawn the cards for the todo view
+        children: context
+            .read<TaskCollectionState>()
+            .taskList
+            .map((item) => TodoCard(item: ToDoItem("TEST")))
+            .toList(),
       ),
       floatingActionButton: AddTodoItemButton(),
     );
@@ -88,7 +92,7 @@ class _TodoCardState extends State<TodoCard> {
   @override
   Widget build(BuildContext context) {
     var textStyleTheme = Theme.of(context).textTheme.bodyMedium!;
-
+    final collectionState = context.watch<TaskCollectionState>();
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -112,12 +116,19 @@ class _TodoCardState extends State<TodoCard> {
                   : Icons.check_box_outline_blank),
             ),
             title: Text(widget.item.getText(),
+                // Make a line through the text if it's marked as complete
                 style: textStyleTheme.copyWith(
                   decoration: widget.item.isDone
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
                 )),
-            trailing: IconButton(onPressed: () => {}, icon: Icon(Icons.close)),
+            trailing: IconButton(
+              onPressed: () => {
+                // User have clicked on delete button, remove from collection
+                collectionState.removeTask(widget.item),
+              },
+              icon: Icon(Icons.close),
+            ),
           ),
         ],
       ),
