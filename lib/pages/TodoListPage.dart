@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 //import 'package:template/blackTheme.dart';
 import 'addItemPage.dart';
-import 'themes/lightPurpleTheme.dart';
-import 'data.dart';
+import '../themes/lightPurpleTheme.dart';
+import '../TodoItem.dart';
 
 void main() {
   runApp(const ToDoApp());
@@ -98,7 +98,7 @@ class _TodoCardState extends State<TodoCard> {
               onPressed: () => {
                 setState(
                   () {
-                    if (widget.item.getIsDone()) {
+                    if (widget.item.isDone) {
                       // Set to false since user tapped box
                       widget.item.setIsDone(false);
                     } else {
@@ -107,13 +107,13 @@ class _TodoCardState extends State<TodoCard> {
                   },
                 ),
               },
-              icon: Icon(widget.item.getIsDone()
+              icon: Icon(widget.item.isDone
                   ? Icons.check_box_outlined
                   : Icons.check_box_outline_blank),
             ),
             title: Text(widget.item.getText(),
                 style: textStyleTheme.copyWith(
-                  decoration: widget.item.getIsDone()
+                  decoration: widget.item.isDone
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
                 )),
