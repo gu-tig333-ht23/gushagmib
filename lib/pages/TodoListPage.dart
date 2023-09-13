@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:template/states/TaskCollectionState.dart';
+import 'package:template/model/TaskCollectionState.dart';
 //import 'package:template/blackTheme.dart';
 import 'addItemPage.dart';
 import '../themes/lightPurpleTheme.dart';
 import '../TodoItem.dart';
 import 'package:provider/provider.dart';
+import 'Enums.dart';
 
 void main() {
   runApp(const ToDoApp());
@@ -37,13 +39,12 @@ class MainPage extends StatelessWidget {
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView(
-        // Spawn the cards for the todo view
-        children: context
-            .read<TaskCollectionState>()
-            .taskList
-            .map((item) => TodoCard(item: ToDoItem("TEST")))
-            .toList(),
-      ),
+          // Spawn the cards for the todo view
+          children: context
+              .read<TaskCollectionState>()
+              .taskList
+              .map((item) => TodoCard(item: item))
+              .toList()),
       floatingActionButton: AddTodoItemButton(),
     );
   }
@@ -62,14 +63,7 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: <Widget>[
-        PopupMenuButton(
-          icon: const Icon(Icons.more_vert),
-          itemBuilder: (context) => <PopupMenuEntry>[
-            const PopupMenuItem(child: Text("all")),
-            const PopupMenuItem(child: Text("done")),
-            const PopupMenuItem(child: Text("undone")),
-          ],
-        ),
+        PopUpMenu(),
       ],
       // backgroundColor: theme.colorScheme.primary,
     );
@@ -77,6 +71,47 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class PopUpMenu extends StatefulWidget {
+  const PopUpMenu({
+    super.key,
+  });
+
+  @override
+  State<PopUpMenu> createState() => _PopUpMenuState();
+}
+
+class _PopUpMenuState extends State<PopUpMenu> {
+  MenuOption? selectedOption;
+
+  // Options for sorting the todo lists.
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_vert),
+      initialValue: selectedOption,
+      onSelected: (var option) {
+        setState(() {
+          selectedOption = option;
+        });
+      },
+      itemBuilder: (context) => <PopupMenuEntry>[
+        PopupMenuItem(
+          value: MenuOption.all,
+          child: Text(describeEnum(MenuOption.all)),
+        ),
+        PopupMenuItem(
+          value: MenuOption.done,
+          child: Text(describeEnum(MenuOption.done)),
+        ),
+        PopupMenuItem(
+          value: MenuOption.undone,
+          child: Text(describeEnum(MenuOption.undone)),
+        ),
+      ],
+    );
+  }
 }
 
 class TodoCard extends StatefulWidget {

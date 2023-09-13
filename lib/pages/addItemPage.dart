@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:template/states/TaskCollectionState.dart';
+import '../model/taskCollectionState.dart';
 import 'package:provider/provider.dart';
 
 class AddToDoItemPage extends StatefulWidget {
