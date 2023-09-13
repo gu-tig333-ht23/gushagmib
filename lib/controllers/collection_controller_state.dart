@@ -7,6 +7,8 @@ class TaskCollectionController with ChangeNotifier {
   // Store a reference to where we fetch data
   final _collection = TaskCollection();
   static final _controller = TaskCollectionController._internal();
+
+  // Keep track of the previous variabel
   MenuOption? _previousOperation = MenuOption.all;
   // Using singleton pattern to allow one controller only
   factory TaskCollectionController() {
@@ -38,6 +40,14 @@ class TaskCollectionController with ChangeNotifier {
     }
     // Only want to notify listeners when we update the options.
     notifyListeners();
+  }
+
+  // Lets us call this method to rebuild
+  // listeners when a todoItem is changed
+  void updateItemList() {
+    if (_previousOperation != MenuOption.all) {
+      notifyListeners();
+    }
   }
 
   List<ToDoItem> get taskList => _collection.sortedTasks;

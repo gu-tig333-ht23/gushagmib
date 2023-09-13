@@ -64,8 +64,6 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
           "My to-do list",
         ),
       ),
-
-      // backgroundColor: theme.colorScheme.primary,
     );
   }
 
@@ -147,6 +145,7 @@ class _TodoCardState extends State<TodoCard> {
                     } else {
                       widget.item.setIsDone(true);
                     }
+                    controller.updateItemList();
                   },
                 ),
               },
