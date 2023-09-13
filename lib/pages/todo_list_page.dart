@@ -5,8 +5,7 @@ import 'add_item_page.dart';
 // Themes
 import '../themes/light_purple_theme.dart';
 // Models
-import '../models/task_collection.dart';
-
+import '../controllers/collection_controller_state.dart';
 import '../models/todo_item.dart';
 import '../models/enums.dart';
 
@@ -21,7 +20,7 @@ class ToDoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => TaskCollectionState(),
+        create: (context) => TaskCollectionController(),
         child: MaterialApp(
           title: 'My todo list',
           theme: lightTheme(),
@@ -38,14 +37,15 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var taskCollection = context.watch<TaskCollectionState>();
+    var controller = context.watch<TaskCollectionController>();
+    print("rebuilding item list");
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView(
-          // Spawn the cards for the todo view
-          children: taskCollection.taskList
-              .map((item) => TodoCard(item: item))
-              .toList()),
+        // Spawn the cards for the todo view
+        children:
+            controller.taskList.map((item) => TodoCard(item: item)).toList(),
+      ),
       floatingActionButton: AddTodoItemButton(),
     );
   }
@@ -94,6 +94,10 @@ class _PopUpMenuState extends State<PopUpMenu> {
       onSelected: (var option) {
         setState(() {
           selectedOption = option;
+          print("Rebuilding popup");
+          // We dont want to listen only update the operation
+          Provider.of<TaskCollectionController>(context, listen: false)
+              .setOperation(selectedOption!);
         });
       },
       itemBuilder: (context) => <PopupMenuEntry>[
@@ -127,7 +131,7 @@ class _TodoCardState extends State<TodoCard> {
   @override
   Widget build(BuildContext context) {
     var textStyleTheme = Theme.of(context).textTheme.bodyMedium!;
-    final collectionState = context.watch<TaskCollectionState>();
+    final controller = context.watch<TaskCollectionController>();
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -160,7 +164,7 @@ class _TodoCardState extends State<TodoCard> {
             trailing: IconButton(
               onPressed: () => {
                 // User have clicked on delete button, remove from collection
-                collectionState.removeTask(widget.item),
+                controller.remove(widget.item),
               },
               icon: Icon(Icons.close),
             ),

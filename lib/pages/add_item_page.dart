@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/task_collection.dart';
 import 'package:provider/provider.dart';
+import '../controllers/collection_controller_state.dart';
 
 class AddToDoItemPage extends StatefulWidget {
   const AddToDoItemPage({
@@ -44,8 +44,8 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
             onPressed: () => {
               // Add the text to our taskCollection
               context
-                  .read<TaskCollectionState>()
-                  .addTask(textFieldController.text),
+                  .read<TaskCollectionController>()
+                  .add(textFieldController.text),
               Navigator.of(context).pop(),
             },
             icon: const Icon(Icons.add),
