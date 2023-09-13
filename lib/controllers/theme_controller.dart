@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // Themes
-import '../themes/light_purple_theme.dart';
-import '../themes/black_theme.dart';
+import '../themes/themes.dart';
 
 class ThemeController with ChangeNotifier {
   static final _controller = ThemeController._internal();
