@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:template/models/todo_item.dart';
 // Widgets
 import 'todo_page_widgets.dart';
 // Themes

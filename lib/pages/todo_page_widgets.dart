@@ -30,7 +30,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           selectedOption = option;
           // We dont want to listen only update the operation
           Provider.of<TaskCollectionController>(context, listen: false)
-              .setOperation(selectedOption!);
+              .setOperation(selectedOption);
         });
       },
       itemBuilder: (context) => <PopupMenuEntry>[
