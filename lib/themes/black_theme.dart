@@ -40,6 +40,8 @@ ThemeData blackTheme() {
         fontFamily: font,
       ),
     ),
+    switchTheme: SwitchThemeData(
+        trackColor: MaterialStateProperty.all<Color>(buttonBackGroundColor)),
     listTileTheme: ListTileThemeData(
       tileColor: listTileColor,
       titleTextStyle: TextStyle(
