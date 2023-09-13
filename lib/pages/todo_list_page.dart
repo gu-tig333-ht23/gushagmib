@@ -5,10 +5,10 @@ import 'add_item_page.dart';
 // Themes
 import '../themes/light_purple_theme.dart';
 // Models
-import '../model/task_collection.dart';
+import '../models/task_collection.dart';
 
-import '../model/todo_item.dart';
-import '../model/enums.dart';
+import '../models/todo_item.dart';
+import '../models/enums.dart';
 
 void main() {
   runApp(const ToDoApp());
