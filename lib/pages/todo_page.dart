@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:template/controllers/theme_controller.dart';
 // Widgets
 import 'todo_page_widgets.dart';
-// Themes
-import '../themes/light_purple_theme.dart';
+import 'toggle_theme.dart';
+
 // Models
 import '../controllers/collection_controller_state.dart';
 
@@ -17,14 +18,25 @@ class ToDoApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => TaskCollectionController(),
-        child: MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TaskCollectionController>(
+          create: (_) => TaskCollectionController(),
+        ),
+        ChangeNotifierProvider<ThemeController>(
+          create: (_) => ThemeController(),
+        ),
+      ],
+      // Add listener for toggling darkmode
+      child: Consumer<ThemeController>(builder: (_, controller, child) {
+        return MaterialApp(
           title: 'My todo list',
-          theme: lightTheme(),
+          theme: controller.theme,
           home: MainPage(),
           debugShowCheckedModeBanner: false,
-        ));
+        );
+      }),
+    );
   }
 }
 
@@ -51,11 +63,11 @@ class MainPage extends StatelessWidget {
                       height: 1,
                     ),
                     TodoTile(item: tasks[index]),
-                    Divider(height: 3),
+                    Divider(height: 0),
                   ]
                 : <Widget>[
                     TodoTile(item: tasks[index]),
-                    Divider(),
+                    Divider(height: 0),
                   ],
           );
         },
@@ -72,7 +84,10 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: [PopUpMenu()],
+      actions: [
+        ToggleDarkTheme(),
+        PopUpMenu(),
+      ],
       title: Center(
         child: Text(
           "My to-do list",
