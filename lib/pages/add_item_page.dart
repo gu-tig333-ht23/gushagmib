@@ -35,9 +35,11 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
             child: TextField(
+              style: Theme.of(context).textTheme.titleMedium,
               controller: textFieldController,
-              decoration:
-                  InputDecoration(hintText: 'What are you going to do?'),
+              decoration: InputDecoration(
+                hintText: 'What are you going to do?',
+              ),
             ),
           ),
           ElevatedButton.icon(

@@ -16,7 +16,7 @@ class PopUpMenu extends StatefulWidget {
 }
 
 class _PopUpMenuState extends State<PopUpMenu> {
-  // Default is all
+  // Default is the option "all"
   MenuOption selectedOption = MenuOption.all;
 
   // Options for sorting the todo lists.
@@ -33,20 +33,15 @@ class _PopUpMenuState extends State<PopUpMenu> {
               .setOperation(selectedOption);
         });
       },
-      itemBuilder: (context) => <PopupMenuEntry>[
-        PopupMenuItem(
-          value: MenuOption.all,
-          child: Text(describeEnum(MenuOption.all)),
-        ),
-        PopupMenuItem(
-          value: MenuOption.done,
-          child: Text(describeEnum(MenuOption.done)),
-        ),
-        PopupMenuItem(
-          value: MenuOption.undone,
-          child: Text(describeEnum(MenuOption.undone)),
-        ),
-      ],
+      itemBuilder: (context) =>
+          MenuOption.values.map((option) => createMenuItem(option)).toList(),
+    );
+  }
+
+  PopupMenuItem<dynamic> createMenuItem(MenuOption option) {
+    return PopupMenuItem(
+      value: option,
+      child: Text(describeEnum(option)),
     );
   }
 }
@@ -63,7 +58,6 @@ class TodoTile extends StatefulWidget {
 class _TodoTileState extends State<TodoTile> {
   @override
   Widget build(BuildContext context) {
-    var textStyleTheme = Theme.of(context).textTheme.bodyMedium!;
     final controller = context.watch<TaskCollectionController>();
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -80,6 +74,7 @@ class _TodoTileState extends State<TodoTile> {
                   } else {
                     widget.item.setIsDone(true);
                   }
+                  // Send request to controller to notify that the list has changed
                   controller.updateItemList();
                 },
               ),
@@ -90,17 +85,19 @@ class _TodoTileState extends State<TodoTile> {
           ),
           title: Text(widget.item.getText(),
               // Make a line through the text if it's marked as complete
-              style: textStyleTheme.copyWith(
-                decoration: widget.item.isDone
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
-              )),
+              style: Theme.of(context).listTileTheme.titleTextStyle!.copyWith(
+                    decoration: widget.item.isDone
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  )),
           trailing: IconButton(
             onPressed: () => {
               // User have clicked on delete button, remove from collection
               controller.remove(widget.item),
             },
-            icon: Icon(Icons.close),
+            icon: Icon(
+              Icons.close,
+            ),
           ),
         ),
       ],

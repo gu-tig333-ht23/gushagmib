@@ -48,10 +48,10 @@ class MainPage extends StatelessWidget {
             children: index == 0
                 ? <Widget>[
                     Divider(
-                      height: 2,
+                      height: 1,
                     ),
                     TodoTile(item: tasks[index]),
-                    Divider(),
+                    Divider(height: 3),
                   ]
                 : <Widget>[
                     TodoTile(item: tasks[index]),
