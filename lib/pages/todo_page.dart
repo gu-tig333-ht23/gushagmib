@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:template/models/todo_item.dart';
 // Widgets
 import 'todo_page_widgets.dart';
 // Themes
@@ -36,12 +37,29 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = context.watch<TaskCollectionController>();
+    var tasks = controller.taskList;
+
     return Scaffold(
       appBar: MainPageAppBar(),
-      body: ListView(
-        // Spawn the cards for the todo view
-        children:
-            controller.taskList.map((item) => TodoCard(item: item)).toList(),
+      body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          return Column(
+            // Set a dividing line on top if index is 0 else below.
+            children: index == 0
+                ? <Widget>[
+                    Divider(
+                      height: 2,
+                    ),
+                    TodoTile(item: tasks[index]),
+                    Divider(),
+                  ]
+                : <Widget>[
+                    TodoTile(item: tasks[index]),
+                    Divider(),
+                  ],
+          );
+        },
       ),
       floatingActionButton: AddTodoItemButton(),
     );

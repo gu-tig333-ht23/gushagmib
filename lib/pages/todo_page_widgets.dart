@@ -16,7 +16,8 @@ class PopUpMenu extends StatefulWidget {
 }
 
 class _PopUpMenuState extends State<PopUpMenu> {
-  MenuOption? selectedOption;
+  // Default is all
+  MenuOption selectedOption = MenuOption.all;
 
   // Options for sorting the todo lists.
   @override
@@ -50,60 +51,59 @@ class _PopUpMenuState extends State<PopUpMenu> {
   }
 }
 
-class TodoCard extends StatefulWidget {
-  const TodoCard({super.key, required this.item});
+class TodoTile extends StatefulWidget {
+  const TodoTile({super.key, required this.item});
 
   final ToDoItem item;
 
   @override
-  State<TodoCard> createState() => _TodoCardState();
+  State<TodoTile> createState() => _TodoTileState();
 }
 
-class _TodoCardState extends State<TodoCard> {
+class _TodoTileState extends State<TodoTile> {
   @override
   Widget build(BuildContext context) {
     var textStyleTheme = Theme.of(context).textTheme.bodyMedium!;
     final controller = context.watch<TaskCollectionController>();
-    return Card(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: IconButton(
-              onPressed: () => {
-                setState(
-                  () {
-                    if (widget.item.isDone) {
-                      // Set to false since user tapped box
-                      widget.item.setIsDone(false);
-                    } else {
-                      widget.item.setIsDone(true);
-                    }
-                    controller.updateItemList();
-                  },
-                ),
-              },
-              icon: Icon(widget.item.isDone
-                  ? Icons.check_box_outlined
-                  : Icons.check_box_outline_blank),
-            ),
-            title: Text(widget.item.getText(),
-                // Make a line through the text if it's marked as complete
-                style: textStyleTheme.copyWith(
-                  decoration: widget.item.isDone
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                )),
-            trailing: IconButton(
-              onPressed: () => {
-                // User have clicked on delete button, remove from collection
-                controller.remove(widget.item),
-              },
-              icon: Icon(Icons.close),
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+          leading: IconButton(
+            onPressed: () => {
+              setState(
+                () {
+                  if (widget.item.isDone) {
+                    // Set to false since user tapped box
+                    widget.item.setIsDone(false);
+                  } else {
+                    widget.item.setIsDone(true);
+                  }
+                  controller.updateItemList();
+                },
+              ),
+            },
+            icon: Icon(widget.item.isDone
+                ? Icons.check_box_outlined
+                : Icons.check_box_outline_blank),
           ),
-        ],
-      ),
+          title: Text(widget.item.getText(),
+              // Make a line through the text if it's marked as complete
+              style: textStyleTheme.copyWith(
+                decoration: widget.item.isDone
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+              )),
+          trailing: IconButton(
+            onPressed: () => {
+              // User have clicked on delete button, remove from collection
+              controller.remove(widget.item),
+            },
+            icon: Icon(Icons.close),
+          ),
+        ),
+      ],
     );
   }
 }
