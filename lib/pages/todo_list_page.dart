@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:template/model/TaskCollectionState.dart';
-//import 'package:template/blackTheme.dart';
-import 'addItemPage.dart';
-import '../themes/lightPurpleTheme.dart';
-import '../TodoItem.dart';
 import 'package:provider/provider.dart';
-import 'Enums.dart';
+import 'add_item_page.dart';
+// Themes
+import '../themes/light_purple_theme.dart';
+// Models
+import '../model/task_collection.dart';
+
+import '../model/todo_item.dart';
+import '../model/enums.dart';
 
 void main() {
   runApp(const ToDoApp());
@@ -36,13 +38,12 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var taskCollection = context.watch<TaskCollectionState>();
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView(
           // Spawn the cards for the todo view
-          children: context
-              .read<TaskCollectionState>()
-              .taskList
+          children: taskCollection.taskList
               .map((item) => TodoCard(item: item))
               .toList()),
       floatingActionButton: AddTodoItemButton(),
@@ -57,14 +58,13 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      actions: [PopUpMenu()],
       title: Center(
         child: Text(
           "My to-do list",
         ),
       ),
-      actions: <Widget>[
-        PopUpMenu(),
-      ],
+
       // backgroundColor: theme.colorScheme.primary,
     );
   }

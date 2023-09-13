@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../TodoItem.dart';
+import 'todo_item.dart';
 
 class TaskCollectionState with ChangeNotifier {
   final List<ToDoItem> _taskList = [];
