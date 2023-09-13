@@ -38,7 +38,6 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = context.watch<TaskCollectionController>();
-    print("rebuilding item list");
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView(
@@ -92,7 +91,6 @@ class _PopUpMenuState extends State<PopUpMenu> {
       onSelected: (var option) {
         setState(() {
           selectedOption = option;
-          print("Rebuilding popup");
           // We dont want to listen only update the operation
           Provider.of<TaskCollectionController>(context, listen: false)
               .setOperation(selectedOption!);
