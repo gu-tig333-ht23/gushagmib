@@ -27,7 +27,7 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "My to-do list",
+          "TodoHub",
         ),
       ),
       body: Column(

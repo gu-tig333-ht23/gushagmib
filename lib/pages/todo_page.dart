@@ -30,7 +30,7 @@ class ToDoApp extends StatelessWidget {
       // Add listener for toggling darkmode
       child: Consumer<ThemeController>(builder: (_, controller, child) {
         return MaterialApp(
-          title: 'My todo list',
+          title: 'TodoHub',
           theme: controller.theme,
           home: MainPage(),
           debugShowCheckedModeBanner: false,
@@ -90,7 +90,7 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
       title: Center(
         child: Text(
-          "My to-do list",
+          "TodoHub",
         ),
       ),
     );
