@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Background color for the scaffold aka rest of the app
+const appBackGroundColor = Colors.white;
+String? font = GoogleFonts.roboto().fontFamily;
 ThemeData lightTheme() {
-  const textColor = Colors.black;
-  // The textcolor for e
-  const bodyTextColor = Colors.black;
-  const iconColor = Colors.black;
-  // The color for the elevatedButton icon and text color
-  const elevatedButtonColor = iconColor;
   // appbar background
   const primaryColour = Color.fromARGB(255, 221, 172, 228);
   const primaryAccentColour = Color.fromARGB(255, 222, 180, 227);
+  const textColor = Colors.black;
+  const bodyTextColor = Colors.black;
+  const textMenuColor = Colors.black;
+  // Icon color for application
+
+  const iconColor = Colors.black;
+  // The color for the elevatedButton & floating action button
+  // icon (and text color as they count as one)
+  const elevatedIconColor = iconColor;
+  // Sets the buttonbackground
+  const buttonBackGroundColor = primaryAccentColour;
   // Background color for the scaffold aka rest of the app
   const appBackGroundColor = Colors.white;
+  const listTileColor = Colors.white;
   String? font = GoogleFonts.roboto().fontFamily;
 
   return ThemeData(
@@ -35,7 +44,7 @@ ThemeData lightTheme() {
       ),
     ),
     listTileTheme: ListTileThemeData(
-      tileColor: appBackGroundColor,
+      tileColor: listTileColor,
       titleTextStyle: TextStyle(
         color: bodyTextColor,
         fontSize: 18,
@@ -76,18 +85,19 @@ ThemeData lightTheme() {
     ),
     // PopupMenuTheme
     popupMenuTheme: PopupMenuThemeData(
-      surfaceTintColor: primaryAccentColour,
+      color: appBackGroundColor,
+      shadowColor: primaryAccentColour,
       labelTextStyle: MaterialStateProperty.all<TextStyle>(
-        TextStyle(color: bodyTextColor, fontFamily: font, fontSize: 14),
+        TextStyle(color: textMenuColor, fontFamily: font, fontSize: 14),
       ),
       textStyle:
-          TextStyle(color: bodyTextColor, fontFamily: font, fontSize: 16),
+          TextStyle(color: textMenuColor, fontFamily: font, fontSize: 16),
     ),
 
     // FloatingActionButtonTheme
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: primaryColour,
-      foregroundColor: iconColor,
+      backgroundColor: buttonBackGroundColor,
+      foregroundColor: elevatedIconColor,
     ),
     //elevatedButtonTheme
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -103,9 +113,10 @@ ThemeData lightTheme() {
           ),
         ),
         // Color four the background on button
-        backgroundColor: MaterialStateProperty.all<Color>(primaryColour),
+        backgroundColor:
+            MaterialStateProperty.all<Color>(buttonBackGroundColor),
         // Icon color also sets the button text color
-        foregroundColor: MaterialStateProperty.all<Color>(elevatedButtonColor),
+        foregroundColor: MaterialStateProperty.all<Color>(elevatedIconColor),
       ),
     ),
     textTheme: TextTheme(
