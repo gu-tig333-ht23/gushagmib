@@ -5,6 +5,71 @@ import 'add_item_page.dart';
 import '../models/todo_item.dart';
 import '../models/enums.dart';
 import 'package:flutter/foundation.dart';
+import 'toggle_theme.dart';
+
+
+
+class MainPage extends StatelessWidget {
+  MainPage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = context.watch<TaskCollectionController>();
+    var tasks = controller.taskList;
+
+    return Scaffold(
+      appBar: MainPageAppBar(),
+      body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          return Column(
+            // Set a dividing line on top if index is 0 else below.
+            children: index == 0
+                ? <Widget>[
+                    Divider(
+                      height: 1,
+                    ),
+                    TodoTile(item: tasks[index]),
+                    Divider(height: 0),
+                  ]
+                : <Widget>[
+                    TodoTile(item: tasks[index]),
+                    Divider(height: 0),
+                  ],
+          );
+        },
+      ),
+      floatingActionButton: AddTodoItemButton(),
+    );
+  }
+}
+
+class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  MainPageAppBar({
+    super.key,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      actions: [
+        ToggleDarkTheme(),
+        PopUpMenu(),
+      ],
+      title: Center(
+        child: Text(
+          "TodoHub",
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+
 
 // Stateful since PopUpMenu only needs to manage it's own state.
 class PopUpMenu extends StatefulWidget {
@@ -96,7 +161,7 @@ class _TodoTileState extends State<TodoTile> {
             onPressed: ()  {
                             // User have clicked on delete button, remove from collection
               controller.remove(widget.item);
-              
+
               String msg = "You deleted the task: ${controller.lastRemovedTask!.getText()}";
               final undoDeletionSnackBar =  SnackBar(content:  Text(msg),
               action: SnackBarAction(

@@ -21,6 +21,8 @@ class TaskCollectionController with ChangeNotifier {
   TaskCollectionController._internal();
 
   ToDoItem? get lastRemovedTask => _lastRemovedTask;
+
+  
   void add(ToDoItem task) {
     _collection.add(task);
     notifyListeners();
