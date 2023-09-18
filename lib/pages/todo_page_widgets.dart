@@ -6,6 +6,7 @@ import '../models/todo_item.dart';
 import '../models/enums.dart';
 import 'package:flutter/foundation.dart';
 
+// Stateful since PopUpMenu only needs to manage it's own state.
 class PopUpMenu extends StatefulWidget {
   const PopUpMenu({
     super.key,
@@ -46,6 +47,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
   }
 }
 
+// Stateful since TodoTile only needs to manage it's own state.
 class TodoTile extends StatefulWidget {
   const TodoTile({super.key, required this.item});
 
