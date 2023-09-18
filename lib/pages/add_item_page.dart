@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/collection_controller_state.dart';
+import '../models/todo_item.dart';
+
+
+
 
 class AddToDoItemPage extends StatefulWidget {
   const AddToDoItemPage({
@@ -44,10 +48,11 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           ),
           ElevatedButton.icon(
             onPressed: () => {
+              
               // Add the text to our taskCollection
               context
                   .read<TaskCollectionController>()
-                  .add(textFieldController.text),
+                  .add(ToDoItem(textFieldController.text)),
               Navigator.of(context).pop(),
             },
             icon: const Icon(Icons.add),
@@ -55,6 +60,7 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           ),
         ],
       ),
+  
     );
   }
 }

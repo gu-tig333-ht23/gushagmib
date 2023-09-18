@@ -8,6 +8,10 @@ class TaskCollectionController with ChangeNotifier {
   final _collection = TaskCollection();
   static final _controller = TaskCollectionController._internal();
 
+  // Latest removed task from the collection, 
+  //used to show snackbar if user deleted wrong.
+  ToDoItem?_lastRemovedTask;
+
   // Keep track of the previous variabel
   MenuOption? _previousOperation = MenuOption.all;
   // Using singleton pattern to allow one controller only
@@ -16,12 +20,14 @@ class TaskCollectionController with ChangeNotifier {
   }
   TaskCollectionController._internal();
 
-  void add(String desc) {
-    _collection.add(ToDoItem(desc));
+  ToDoItem? get lastRemovedTask => _lastRemovedTask;
+  void add(ToDoItem task) {
+    _collection.add(task);
     notifyListeners();
   }
 
   void remove(ToDoItem item) {
+    _lastRemovedTask = item;
     _collection.remove(item);
     notifyListeners();
   }

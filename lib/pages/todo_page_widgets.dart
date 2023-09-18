@@ -93,9 +93,18 @@ class _TodoTileState extends State<TodoTile> {
                         : TextDecoration.none,
                   )),
           trailing: IconButton(
-            onPressed: () => {
-              // User have clicked on delete button, remove from collection
-              controller.remove(widget.item),
+            onPressed: ()  {
+                            // User have clicked on delete button, remove from collection
+              controller.remove(widget.item);
+              
+              String msg = "You deleted the task: ${controller.lastRemovedTask!.getText()}";
+              final undoDeletionSnackBar =  SnackBar(content:  Text(msg),
+              action: SnackBarAction(
+                label: 'Undo deletion', 
+                onPressed: () => {controller.add(controller.lastRemovedTask!),},),);
+                ScaffoldMessenger.of(context).showSnackBar(undoDeletionSnackBar);
+
+
             },
             icon: Icon(
               Icons.close,
