@@ -12,7 +12,5 @@ class ToDoItem {
     _isDone = isDone;
   }
 
-  bool getIsDone() {
-    return _isDone;
-  }
+  bool get isDone => _isDone;
 }
