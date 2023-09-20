@@ -17,7 +17,6 @@ class MainPage extends StatelessWidget {
     var collectionState = context.watch<TaskCollectionState>();
     var tasks = collectionState.taskList;
     print(tasks.length);
-    //controller.getTodoItems();
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView.builder(
@@ -93,7 +92,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           selectedOption = option;
           // We dont want to listen only update the operation
           Provider.of<TaskCollectionState>(context, listen: false)
-              .setOperation(selectedOption);
+              .setSort(selectedOption);
         });
       },
       itemBuilder: (context) =>
@@ -129,7 +128,7 @@ class _TodoTileState extends State<TodoTile> {
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 5),
           leading: IconButton(
-            onPressed: () => {
+            onPressed: () {
               setState(
                 () {
                   if (widget.item.isDone) {
@@ -138,12 +137,10 @@ class _TodoTileState extends State<TodoTile> {
                   } else {
                     widget.item.done = true;
                   }
-                  // Notify API that an item has been changed
-                  // collectionState.updateTodoItem(widget.item.id);
-                  // Send request to controller to notify that the list has changed
-                  collectionState.updateItemList();
+
+                  collectionState.updateTodoItem(widget.item);
                 },
-              ),
+              );
             },
             icon: Icon(widget.item.isDone
                 ? Icons.check_box_outlined

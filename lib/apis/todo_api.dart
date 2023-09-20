@@ -25,6 +25,15 @@ class TodoAPI {
     );
   }
 
+  static Future<void> update(ToDoItem item) async {
+    String id = item.id;
+    await http.put(
+      headers: {"Content-Type": "application/json"},
+      Uri.parse('$ENDPOINT/todos/$id?key=$API_KEY'),
+      body: jsonEncode(item.toJson()),
+    );
+  }
+
   static Future<List<ToDoItem>> fetchTodoItems() async {
     http.Response response =
         await http.get(Uri.parse('$ENDPOINT/todos?key=$API_KEY'));
