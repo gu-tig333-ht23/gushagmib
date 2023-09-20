@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controllers/collection_controller_state.dart';
+import '../controllers/collection_state.dart';
 import '../models/todo_item.dart';
-
-
-
 
 class AddToDoItemPage extends StatefulWidget {
   const AddToDoItemPage({
@@ -47,20 +44,20 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
             ),
           ),
           ElevatedButton.icon(
-            onPressed: () => {
-              
+            onPressed: () async {
               // Add the text to our taskCollection
-              context
-                  .read<TaskCollectionController>()
-                  .add(ToDoItem(textFieldController.text)),
-              Navigator.of(context).pop(),
+              ToDoItem newTask = ToDoItem(textFieldController.text);
+              String title = newTask.getText;
+              print("Title is: $title");
+              context.read<TaskCollectionState>().add(newTask);
+
+              Navigator.of(context).pop();
             },
             icon: const Icon(Icons.add),
             label: Text("ADD"),
           ),
         ],
       ),
-  
     );
   }
 }

@@ -3,11 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:template/controllers/theme_controller.dart';
 // Widgets
 import 'pages/todo_page_widgets.dart';
-
+import 'controllers/collection_state.dart';
 // Models
-import 'controllers/collection_controller_state.dart';
 
 void main() {
+  // Initiate tasks
+  TaskCollectionState().fetchTasks();
   runApp(const ToDoApp());
 }
 
@@ -19,8 +20,8 @@ class ToDoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<TaskCollectionController>(
-          create: (_) => TaskCollectionController(),
+        ChangeNotifierProvider<TaskCollectionState>(
+          create: (_) => TaskCollectionState(),
         ),
         ChangeNotifierProvider<ThemeController>(
           create: (_) => ThemeController(),

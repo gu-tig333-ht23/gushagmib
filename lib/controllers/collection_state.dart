@@ -1,31 +1,39 @@
 import 'package:flutter/widgets.dart';
-import '../models/task_collection.dart';
 import '../models/todo_item.dart';
 import '../models/enums.dart';
+import '../apis/todo_api.dart';
+import '../models/task_collection.dart';
+import 'package:http/http.dart' as http;
 
-class TaskCollectionController with ChangeNotifier {
+class TaskCollectionState with ChangeNotifier {
   // Store a reference to where we fetch data
   final _collection = TaskCollection();
-  static final _controller = TaskCollectionController._internal();
-
-  // Latest removed task from the collection, 
+  List<ToDoItem> _taskCollection = [];
+  static final _controller = TaskCollectionState._internal();
+  // Latest removed task from the collection,
   //used to show snackbar if user deleted wrong.
-  ToDoItem?_lastRemovedTask;
+  ToDoItem? _lastRemovedTask;
 
   // Keep track of the previous variabel
   MenuOption? _previousOperation = MenuOption.all;
   // Using singleton pattern to allow one controller only
-  factory TaskCollectionController() {
+  factory TaskCollectionState() {
     return _controller;
   }
-  TaskCollectionController._internal();
+  TaskCollectionState._internal();
 
   ToDoItem? get lastRemovedTask => _lastRemovedTask;
 
-  
-  void add(ToDoItem task) {
-    _collection.add(task);
+  void fetchTasks() async {
+    var taskCollection = await TodoAPI.fetchTodoItems();
+    _taskCollection = taskCollection;
     notifyListeners();
+  }
+
+  void add(ToDoItem task) async {
+    _collection.add(task);
+    await TodoAPI.add(task);
+    fetchTasks();
   }
 
   void remove(ToDoItem item) {
@@ -58,5 +66,5 @@ class TaskCollectionController with ChangeNotifier {
     }
   }
 
-  List<ToDoItem> get taskList => _collection.sortedTasks;
+  List<ToDoItem> get taskList => _taskCollection;
 }
