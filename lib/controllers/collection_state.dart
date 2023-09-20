@@ -2,13 +2,11 @@ import 'package:flutter/widgets.dart';
 import '../models/todo_item.dart';
 import '../models/enums.dart';
 import '../apis/todo_api.dart';
-import '../models/task_collection.dart';
-import 'package:http/http.dart' as http;
 
 class TaskCollectionState with ChangeNotifier {
   // Store a reference to where we fetch data
-  final _collection = TaskCollection();
   List<ToDoItem> _taskCollection = [];
+  //List<ToDoItem> _sortedTasks = [];
   static final _controller = TaskCollectionState._internal();
   // Latest removed task from the collection,
   //used to show snackbar if user deleted wrong.
@@ -24,36 +22,40 @@ class TaskCollectionState with ChangeNotifier {
 
   ToDoItem? get lastRemovedTask => _lastRemovedTask;
 
-  void fetchTasks() async {
+  Future<void> fetchTasks() async {
     var taskCollection = await TodoAPI.fetchTodoItems();
     _taskCollection = taskCollection;
     notifyListeners();
   }
 
-  void add(ToDoItem task) async {
-    _collection.add(task);
+  Future<void> add(ToDoItem task) async {
     await TodoAPI.add(task);
-    fetchTasks();
+    notifyListeners();
   }
 
-  void remove(ToDoItem item) {
+  Future<void> remove(ToDoItem item) async {
+    // save last item, in case of undoing
     _lastRemovedTask = item;
-    _collection.remove(item);
+    await TodoAPI.remove(item);
     notifyListeners();
   }
 
   void setOperation(MenuOption option) {
     var notPrevious = option != _previousOperation;
+    print("SORTING");
     if (notPrevious) {
       _previousOperation = option;
       if (option == MenuOption.all) {
-        _collection.sort = AllTasksSort();
+        // Take all of the items regardless of done.
+        _taskCollection = _taskCollection;
       } else if (option == MenuOption.done) {
-        _collection.sort = DoneTasksSort();
+        _taskCollection = _taskCollection.where((task) => task.isDone).toList();
       } else if (option == MenuOption.undone) {
-        _collection.sort = UnDoneTaskSort();
+        _taskCollection =
+            _taskCollection.where((task) => !task.isDone).toList();
       }
     }
+    fetchTasks();
     // Only want to notify listeners when we update the options.
     notifyListeners();
   }
@@ -65,6 +67,8 @@ class TaskCollectionState with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void updateTodoItem(String id) {}
 
   List<ToDoItem> get taskList => _taskCollection;
 }

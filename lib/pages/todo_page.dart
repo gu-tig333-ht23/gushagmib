@@ -132,14 +132,16 @@ class _TodoTileState extends State<TodoTile> {
             onPressed: () => {
               setState(
                 () {
-                  /*                 if (widget.item.isDone) {
+                  if (widget.item.isDone) {
                     // Set to false since user tapped box
                     widget.item.done = false;
                   } else {
                     widget.item.done = true;
                   }
+                  // Notify API that an item has been changed
+                  // collectionState.updateTodoItem(widget.item.id);
                   // Send request to controller to notify that the list has changed
-                  controller.updateItemList(); */
+                  collectionState.updateItemList();
                 },
               ),
             },
@@ -155,22 +157,16 @@ class _TodoTileState extends State<TodoTile> {
                         : TextDecoration.none,
                   )),
           trailing: IconButton(
-            onPressed: () {
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
               // User have clicked on delete button, remove from collection
-/*               collectionState.remove(widget.item);
- */
-              String msg =
-                  "You deleted the task: ${collectionState.lastRemovedTask!.getText}";
-              final undoDeletionSnackBar = SnackBar(
-                content: Text(msg),
-                action: SnackBarAction(
-                  label: 'Undo deletion',
-                  onPressed: () => {
-                    collectionState.add(collectionState.lastRemovedTask!),
-                  },
-                ),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(undoDeletionSnackBar);
+              await collectionState.remove(widget.item);
+              // Refetch since
+              await collectionState.fetchTasks();
+
+              final undoDeletionSnackBar = showSnackBar(collectionState);
+
+              messenger.showSnackBar(undoDeletionSnackBar);
             },
             icon: Icon(
               Icons.close,
@@ -178,6 +174,21 @@ class _TodoTileState extends State<TodoTile> {
           ),
         ),
       ],
+    );
+  }
+
+  SnackBar showSnackBar(TaskCollectionState collectionState) {
+    return SnackBar(
+      duration: const Duration(seconds: 2),
+      content: Text(
+          "You deleted the task: ${collectionState.lastRemovedTask!.getText}"),
+      action: SnackBarAction(
+        label: 'Undo deletion',
+        onPressed: () async {
+          await collectionState.add(collectionState.lastRemovedTask!);
+          await collectionState.fetchTasks();
+        },
+      ),
     );
   }
 }

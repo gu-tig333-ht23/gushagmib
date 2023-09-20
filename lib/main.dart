@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/controllers/theme_controller.dart';
 // Widgets
-import 'pages/todo_page_widgets.dart';
+import 'pages/todo_page.dart';
 import 'controllers/collection_state.dart';
 // Models
 

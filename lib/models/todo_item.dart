@@ -7,7 +7,7 @@ class ToDoItem {
   ToDoItem(this._text, [this._id = "", this._isDone = false]);
 
   factory ToDoItem.fromJson(Map<String, dynamic> json) {
-    return ToDoItem(json['id'], json['title'], json['done']);
+    return ToDoItem(json['title'], json['id'], json['done']);
   }
 
   set done(bool value) => _isDone = value;

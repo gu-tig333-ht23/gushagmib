@@ -25,6 +25,7 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
 
   @override
   Widget build(BuildContext context) {
+    var collectionState = context.read<TaskCollectionState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -45,12 +46,13 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           ),
           ElevatedButton.icon(
             onPressed: () async {
-              // Add the text to our taskCollection
-              ToDoItem newTask = ToDoItem(textFieldController.text);
-              String title = newTask.getText;
-              print("Title is: $title");
-              context.read<TaskCollectionState>().add(newTask);
+              await collectionState.add(ToDoItem(textFieldController.text));
+              collectionState.fetchTasks();
 
+              // If not mounted, return.
+              if (!context.mounted) {
+                return;
+              }
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.add),

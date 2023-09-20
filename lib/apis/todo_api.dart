@@ -9,13 +9,20 @@ const String ENDPOINT = 'https://todoapp-api.apps.k8s.gu.se';
 
 class TodoAPI {
   static Future<void> add(ToDoItem item) async {
-    print("Adding");
-    http.Response response = await http.post(
+    await http.post(
       headers: {"Content-Type": "application/json"},
       Uri.parse('$ENDPOINT/todos?key=$API_KEY'),
       body: jsonEncode(item.toJson()),
     );
-    print(response.body);
+  }
+
+  static Future<void> remove(ToDoItem item) async {
+    String id = item.id;
+    await http.delete(
+      headers: {"Content-Type": "application/json"},
+      Uri.parse('$ENDPOINT/todos/$id?key=$API_KEY'),
+      body: jsonEncode(item.toJson()),
+    );
   }
 
   static Future<List<ToDoItem>> fetchTodoItems() async {
