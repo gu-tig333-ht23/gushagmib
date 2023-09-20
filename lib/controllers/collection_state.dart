@@ -46,10 +46,9 @@ class TaskCollectionState with ChangeNotifier {
       } else if (option == MenuOption.undone) {
         _sort = UnDoneTaskSort();
       }
+      // Only want to notify listeners when we update the options.
+      notifyListeners();
     }
-
-    // Only want to notify listeners when we update the options.
-    notifyListeners();
   }
 
   Future<void> updateTodoItem(ToDoItem item) async {
