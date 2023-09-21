@@ -23,4 +23,13 @@ class ToDoItem {
       "done": _isDone,
     };
   }
+
+  void updateIsDone() {
+    if (_isDone) {
+      // Set to false since user tapped box
+      _isDone = false;
+    } else {
+      _isDone = true;
+    }
+  }
 }

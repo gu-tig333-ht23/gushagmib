@@ -131,13 +131,9 @@ class _TodoTileState extends State<TodoTile> {
             onPressed: () {
               setState(
                 () {
-                  if (widget.item.isDone) {
-                    // Set to false since user tapped box
-                    widget.item.done = false;
-                  } else {
-                    widget.item.done = true;
-                  }
-
+                  // The box is tapped, update the variable isDone.
+                  widget.item.updateIsDone();
+                  // Tell the state that an item has been updated and
                   collectionState.updateTodoItem(widget.item);
                 },
               );
