@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:template/controllers/theme_controller.dart';
+import 'package:template/controllers/theme_state.dart';
 import 'package:provider/provider.dart';
 
-class ToggleDarkTheme extends StatelessWidget {
-  ToggleDarkTheme({super.key});
+class ToggleDarkThemeWidget extends StatelessWidget {
+  ToggleDarkThemeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    ThemeController themeController = context.watch<ThemeController>();
+    ThemeState themeController = context.watch<ThemeState>();
     // True as default
     return Switch(
       onChanged: (bool value) {

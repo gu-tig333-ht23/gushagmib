@@ -1,13 +1,13 @@
-class ToDoItem {
+class TodoItem {
   String _text;
   String _id;
   bool _isDone;
 
   //ToDoItem(this._text);
-  ToDoItem(this._text, [this._id = "", this._isDone = false]);
+  TodoItem(this._text, [this._id = "", this._isDone = false]);
 
-  factory ToDoItem.fromJson(Map<String, dynamic> json) {
-    return ToDoItem(json['title'], json['id'], json['done']);
+  factory TodoItem.fromJson(Map<String, dynamic> json) {
+    return TodoItem(json['title'], json['id'], json['done']);
   }
 
   set done(bool value) => _isDone = value;

@@ -5,16 +5,16 @@ import '../apis/todo_api.dart';
 
 class TaskCollectionState with ChangeNotifier {
   // Store a reference to where we fetch data
-  List<ToDoItem> _taskCollection = [];
+  List<TodoItem> _taskCollection = [];
   // Latest removed task from the collection,
   //used to show snackbar if user deleted wrong.
-  ToDoItem? _lastRemovedTask;
+  TodoItem? _lastRemovedTask;
 
   // Keep track of the previous variabel
   MenuOption? _previousOperation = MenuOption.all;
   ISort _sort = AllTasksSort();
 
-  ToDoItem? get lastRemovedTask => _lastRemovedTask;
+  TodoItem? get lastRemovedTask => _lastRemovedTask;
 
   Future<void> fetchTasks() async {
     var taskCollection = await TodoAPI.fetchTodoItems();
@@ -22,12 +22,12 @@ class TaskCollectionState with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> add(ToDoItem task) async {
+  Future<void> add(TodoItem task) async {
     await TodoAPI.add(task);
     notifyListeners();
   }
 
-  Future<void> remove(ToDoItem item) async {
+  Future<void> remove(TodoItem item) async {
     // save last item, in case of undoing
     _lastRemovedTask = item;
     await TodoAPI.remove(item);
@@ -51,7 +51,7 @@ class TaskCollectionState with ChangeNotifier {
     }
   }
 
-  Future<void> updateTodoItem(ToDoItem item) async {
+  Future<void> updateTodoItem(TodoItem item) async {
     await TodoAPI.update(item);
     if (_previousOperation != MenuOption.all) {
       // Notify if we have changed option
@@ -59,34 +59,34 @@ class TaskCollectionState with ChangeNotifier {
     }
   }
 
-  List<ToDoItem> get taskList => _sort.getSortedTasks(_taskCollection);
+  List<TodoItem> get taskList => _sort.getSortedTasks(_taskCollection);
 }
 
 // Adaption of the strategy pattern
 abstract class ISort {
-  List<ToDoItem> getSortedTasks(List<ToDoItem> list);
+  List<TodoItem> getSortedTasks(List<TodoItem> list);
 }
 
 class AllTasksSort implements ISort {
   @override
-  List<ToDoItem> getSortedTasks(List<ToDoItem> tasks) {
+  List<TodoItem> getSortedTasks(List<TodoItem> tasks) {
     return tasks;
   }
 }
 
 class DoneTasksSort implements ISort {
   @override
-  List<ToDoItem> getSortedTasks(List<ToDoItem> tasks) {
+  List<TodoItem> getSortedTasks(List<TodoItem> tasks) {
     return tasks.where((task) => task.isDone).toList();
   }
 }
 
 class UnDoneTaskSort implements ISort {
   @override
-  List<ToDoItem> getSortedTasks(List<ToDoItem> tasks) {
-    List<ToDoItem> unDoneTasks = [];
+  List<TodoItem> getSortedTasks(List<TodoItem> tasks) {
+    List<TodoItem> unDoneTasks = [];
     for (int i = 0; i < tasks.length; i++) {
-      ToDoItem task = tasks[i];
+      TodoItem task = tasks[i];
       if (!task.isDone) {
         unDoneTasks.add(task);
       }

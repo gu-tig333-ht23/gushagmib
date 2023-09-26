@@ -46,7 +46,7 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           ),
           ElevatedButton.icon(
             onPressed: () async {
-              await collectionState.add(ToDoItem(textFieldController.text));
+              await collectionState.add(TodoItem(textFieldController.text));
               await collectionState.fetchTasks();
 
               // If not mounted, return.

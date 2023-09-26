@@ -7,7 +7,7 @@ const String API_KEY = 'abb6cf01-0a78-4af3-a786-9ea8819073fb';
 const String ENDPOINT = 'https://todoapp-api.apps.k8s.gu.se';
 
 class TodoAPI {
-  static Future<void> add(ToDoItem item) async {
+  static Future<void> add(TodoItem item) async {
     await http.post(
       headers: {"Content-Type": "application/json"},
       Uri.parse('$ENDPOINT/todos?key=$API_KEY'),
@@ -15,7 +15,7 @@ class TodoAPI {
     );
   }
 
-  static Future<void> remove(ToDoItem item) async {
+  static Future<void> remove(TodoItem item) async {
     String id = item.id;
     await http.delete(
       headers: {"Content-Type": "application/json"},
@@ -24,7 +24,7 @@ class TodoAPI {
     );
   }
 
-  static Future<void> update(ToDoItem item) async {
+  static Future<void> update(TodoItem item) async {
     String id = item.id;
     await http.put(
       headers: {"Content-Type": "application/json"},
@@ -33,13 +33,13 @@ class TodoAPI {
     );
   }
 
-  static Future<List<ToDoItem>> fetchTodoItems() async {
+  static Future<List<TodoItem>> fetchTodoItems() async {
     http.Response response =
         await http.get(Uri.parse('$ENDPOINT/todos?key=$API_KEY'));
 
     List<dynamic> jsonContents = await jsonDecode(response.body);
     return jsonContents
-        .map((jsonContents) => ToDoItem.fromJson(jsonContents))
+        .map((jsonContents) => TodoItem.fromJson(jsonContents))
         .toList();
   }
 }
