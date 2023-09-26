@@ -171,14 +171,14 @@ class _TodoTileState extends State<TodoTile> {
   }
 
   SnackBar showSnackBar(TaskCollectionState collectionState) {
+    var removedTask = collectionState.lastRemovedTask;
     return SnackBar(
       duration: const Duration(seconds: 2),
-      content: Text(
-          "You deleted the task: ${collectionState.lastRemovedTask!.getText}"),
+      content: Text("You deleted the task: ${removedTask!.getText}"),
       action: SnackBarAction(
         label: 'Undo deletion',
         onPressed: () async {
-          await collectionState.add(collectionState.lastRemovedTask!);
+          await collectionState.add(removedTask);
           await collectionState.fetchTasks();
         },
       ),
