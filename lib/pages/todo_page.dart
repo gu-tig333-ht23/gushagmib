@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controllers/collection_controller_state.dart';
+import '../controllers/collection_state.dart';
 import 'add_item_page.dart';
 import '../models/todo_item.dart';
 import '../models/enums.dart';
 import 'package:flutter/foundation.dart';
 import 'toggle_theme.dart';
-
-
 
 class MainPage extends StatelessWidget {
   MainPage({
@@ -16,9 +14,9 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = context.watch<TaskCollectionController>();
-    var tasks = controller.taskList;
-
+    var collectionState = context.watch<TaskCollectionState>();
+    var tasks = collectionState.taskList;
+    print(tasks.length);
     return Scaffold(
       appBar: MainPageAppBar(),
       body: ListView.builder(
@@ -69,8 +67,6 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-
-
 // Stateful since PopUpMenu only needs to manage it's own state.
 class PopUpMenu extends StatefulWidget {
   const PopUpMenu({
@@ -95,8 +91,8 @@ class _PopUpMenuState extends State<PopUpMenu> {
         setState(() {
           selectedOption = option;
           // We dont want to listen only update the operation
-          Provider.of<TaskCollectionController>(context, listen: false)
-              .setOperation(selectedOption);
+          Provider.of<TaskCollectionState>(context, listen: false)
+              .setSort(selectedOption);
         });
       },
       itemBuilder: (context) =>
@@ -125,32 +121,28 @@ class TodoTile extends StatefulWidget {
 class _TodoTileState extends State<TodoTile> {
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<TaskCollectionController>();
+    final collectionState = context.watch<TaskCollectionState>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 5),
           leading: IconButton(
-            onPressed: () => {
+            onPressed: () {
               setState(
                 () {
-                  if (widget.item.isDone) {
-                    // Set to false since user tapped box
-                    widget.item.setIsDone(false);
-                  } else {
-                    widget.item.setIsDone(true);
-                  }
-                  // Send request to controller to notify that the list has changed
-                  controller.updateItemList();
+                  // The box is tapped, update the variable isDone.
+                  widget.item.updateIsDone();
+                  // Tell the state that an item has been updated and
+                  collectionState.updateTodoItem(widget.item);
                 },
-              ),
+              );
             },
             icon: Icon(widget.item.isDone
                 ? Icons.check_box_outlined
                 : Icons.check_box_outline_blank),
           ),
-          title: Text(widget.item.getText(),
+          title: Text(widget.item.getText,
               // Make a line through the text if it's marked as complete
               style: Theme.of(context).listTileTheme.titleTextStyle!.copyWith(
                     decoration: widget.item.isDone
@@ -158,18 +150,16 @@ class _TodoTileState extends State<TodoTile> {
                         : TextDecoration.none,
                   )),
           trailing: IconButton(
-            onPressed: ()  {
-                            // User have clicked on delete button, remove from collection
-              controller.remove(widget.item);
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              // User have clicked on delete button, remove from collection
+              await collectionState.remove(widget.item);
+              // Refetch since
+              await collectionState.fetchTasks();
 
-              String msg = "You deleted the task: ${controller.lastRemovedTask!.getText()}";
-              final undoDeletionSnackBar =  SnackBar(content:  Text(msg),
-              action: SnackBarAction(
-                label: 'Undo deletion', 
-                onPressed: () => {controller.add(controller.lastRemovedTask!),},),);
-                ScaffoldMessenger.of(context).showSnackBar(undoDeletionSnackBar);
+              final undoDeletionSnackBar = showSnackBar(collectionState);
 
-
+              messenger.showSnackBar(undoDeletionSnackBar);
             },
             icon: Icon(
               Icons.close,
@@ -177,6 +167,21 @@ class _TodoTileState extends State<TodoTile> {
           ),
         ),
       ],
+    );
+  }
+
+  SnackBar showSnackBar(TaskCollectionState collectionState) {
+    var removedTask = collectionState.lastRemovedTask;
+    return SnackBar(
+      duration: const Duration(seconds: 2),
+      content: Text("You deleted the task: ${removedTask!.getText}"),
+      action: SnackBarAction(
+        label: 'Undo deletion',
+        onPressed: () async {
+          await collectionState.add(removedTask);
+          await collectionState.fetchTasks();
+        },
+      ),
     );
   }
 }

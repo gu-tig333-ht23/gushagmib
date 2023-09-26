@@ -1,16 +1,35 @@
 class ToDoItem {
-  final String _text;
-  bool _isDone = false;
+  String _text;
+  String _id;
+  bool _isDone;
 
-  ToDoItem(this._text);
+  //ToDoItem(this._text);
+  ToDoItem(this._text, [this._id = "", this._isDone = false]);
 
-  String getText() {
-    return _text;
+  factory ToDoItem.fromJson(Map<String, dynamic> json) {
+    return ToDoItem(json['title'], json['id'], json['done']);
   }
 
-  void setIsDone(bool isDone) {
-    _isDone = isDone;
-  }
-
+  set done(bool value) => _isDone = value;
   bool get isDone => _isDone;
+  String get id => _id;
+  String get getText => _text;
+
+  // Convert to json
+  Map<String, dynamic> toJson() {
+    return {
+      "id": _id,
+      "title": _text,
+      "done": _isDone,
+    };
+  }
+
+  void updateIsDone() {
+    if (_isDone) {
+      // Set to false since user tapped box
+      _isDone = false;
+    } else {
+      _isDone = true;
+    }
+  }
 }
