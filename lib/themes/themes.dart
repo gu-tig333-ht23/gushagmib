@@ -199,12 +199,20 @@ ThemeData ThemeBluePrint(
         fontSize: 16,
       ),
     ),
+
     textTheme: TextTheme(
+        bodyMedium:
+            TextStyle(fontSize: 16, color: bodyTextColor, fontFamily: font),
+        bodyLarge: TextStyle(
+          fontSize: 18,
+          color: iconColor,
+          fontFamily: font,
+        ),
         titleMedium: TextStyle(
-      fontSize: 18,
-      color: bodyTextColor,
-      fontFamily: font,
-    )),
+          fontSize: 18,
+          color: bodyTextColor,
+          fontFamily: font,
+        )),
     useMaterial3: true,
   );
 }

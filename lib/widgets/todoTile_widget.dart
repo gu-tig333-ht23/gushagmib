@@ -80,8 +80,11 @@ class _TodoTileWidgetState extends State<TodoTileWidget> {
         await collectionState.remove(widget.item);
         // Refetch since
         await collectionState.fetchTasks();
-
-        final undoDeletionSnackBar = showSnackBar(collectionState);
+        // If not mounted, return.
+        if (!context.mounted) {
+          return;
+        }
+        final undoDeletionSnackBar = showSnackBar(context, collectionState);
 
         messenger.showSnackBar(undoDeletionSnackBar);
       },
@@ -149,11 +152,24 @@ class _TodoTileWidgetState extends State<TodoTileWidget> {
             ));
   }
 
-  SnackBar showSnackBar(TaskCollectionState collectionState) {
+  SnackBar showSnackBar(BuildContext context, collectionState) {
     var removedTask = collectionState.lastRemovedTask;
     return SnackBar(
       duration: const Duration(seconds: 2),
-      content: Text("Deleted: ${removedTask!.text}"),
+      content: Text.rich(
+        TextSpan(
+          text: "Deleted: ",
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Colors.pinkAccent,
+              ),
+          children: <InlineSpan>[
+            TextSpan(
+              text: "${removedTask.text}",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ), //Text("Deleted: ${removedTask!.text}"),
       action: SnackBarAction(
         label: 'Undo deletion',
         onPressed: () async {
