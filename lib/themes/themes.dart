@@ -184,6 +184,7 @@ ThemeData ThemeBluePrint(
       ),
     ),
     snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         side: BorderSide(color: primaryAccentColour, width: 1),
         borderRadius: BorderRadius.circular(24),
