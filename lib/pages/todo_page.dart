@@ -6,7 +6,6 @@ import '../models/enums.dart';
 import 'package:flutter/foundation.dart';
 // Widgets
 import '../widgets/toggle_theme_widget.dart';
-import '../widgets/todoTile_widget.dart';
 import '../widgets/reorderable_list_widget.dart';
 
 class MainPage extends StatelessWidget {
