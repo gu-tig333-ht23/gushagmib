@@ -37,6 +37,10 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
             child: TextField(
+              autofocus: true,
+              onSubmitted: (value) async {
+                await addTodoItem(collectionState, textFieldController);
+              },
               style: Theme.of(context).textTheme.titleMedium,
               controller: textFieldController,
               decoration: InputDecoration(
@@ -46,14 +50,7 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
           ),
           ElevatedButton.icon(
             onPressed: () async {
-              await collectionState.add(TodoItem(textFieldController.text));
-              await collectionState.fetchTasks();
-
-              // If not mounted, return.
-              if (!context.mounted) {
-                return;
-              }
-              Navigator.of(context).pop();
+              await addTodoItem(collectionState, textFieldController);
             },
             icon: const Icon(Icons.add),
             label: Text("ADD"),
@@ -61,5 +58,17 @@ class _AddToDoItemPageState extends State<AddToDoItemPage> {
         ],
       ),
     );
+  }
+
+  Future<void> addTodoItem(TaskCollectionState collectionState,
+      TextEditingController controller) async {
+    await collectionState.add(TodoItem(controller.text));
+    await collectionState.fetchTasks();
+
+    // If not mounted, return.
+    if (!context.mounted) {
+      return;
+    }
+    Navigator.of(context).pop();
   }
 }
