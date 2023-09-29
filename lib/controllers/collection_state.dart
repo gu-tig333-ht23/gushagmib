@@ -23,8 +23,6 @@ class TaskCollectionState with ChangeNotifier {
   }
 
   Future<void> add(TodoItem task) async {
-    task.text = "${task.text} {${_taskCollection.length}";
-    print(task.text.split('{'));
     await TodoAPI.add(task);
     notifyListeners();
   }

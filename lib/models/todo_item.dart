@@ -2,22 +2,15 @@ class TodoItem {
   String _text;
   String _id;
   bool _isDone;
-  int _index;
   //ToDoItem(this._text);
-  TodoItem(this._text, [this._id = "", this._isDone = false, this._index = 0]);
+  TodoItem(this._text, [this._id = "", this._isDone = false]);
 
   factory TodoItem.fromJson(Map<String, dynamic> json) {
-    List parsedText = json['title'].split('{');
-    String text = parsedText[0];
+    String text = json['title'];
     String id = json['id'];
     bool isDone = json['done'];
-    int index = int.parse(parsedText[1]);
-    print(parsedText);
-    return TodoItem(text, id, isDone, index);
+    return TodoItem(text, id, isDone);
   }
-
-  set index(int value) => _index = value;
-  int get index => _index;
 
   set done(bool value) => _isDone = value;
   bool get isDone => _isDone;
