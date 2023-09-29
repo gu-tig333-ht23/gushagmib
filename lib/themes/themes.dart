@@ -87,6 +87,7 @@ ThemeData ThemeBluePrint(
     Color elevatedIconColor) {
   return ThemeData(
     primaryColor: primaryColour,
+    cardColor: listTileColor,
     scaffoldBackgroundColor: appBackGroundColor,
     fontFamily: font,
     // Appbar theme
@@ -107,7 +108,7 @@ ThemeData ThemeBluePrint(
     switchTheme: SwitchThemeData(
         trackColor: MaterialStateProperty.all<Color>(buttonBackGroundColor)),
     listTileTheme: ListTileThemeData(
-      tileColor: listTileColor,
+      tileColor: appBackGroundColor,
       titleTextStyle: TextStyle(
         color: bodyTextColor,
         fontSize: 18,
@@ -182,12 +183,36 @@ ThemeData ThemeBluePrint(
         foregroundColor: MaterialStateProperty.all<Color>(elevatedIconColor),
       ),
     ),
+    snackBarTheme: SnackBarThemeData(
+      closeIconColor: iconColor,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: primaryAccentColour, width: 1),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      showCloseIcon: true,
+      actionTextColor: Colors.blue,
+      backgroundColor: primaryColour,
+      contentTextStyle: TextStyle(
+        color: textMenuColor,
+        fontFamily: font,
+        fontSize: 16,
+      ),
+    ),
+
     textTheme: TextTheme(
+        bodyMedium:
+            TextStyle(fontSize: 16, color: bodyTextColor, fontFamily: font),
+        bodyLarge: TextStyle(
+          fontSize: 18,
+          color: iconColor,
+          fontFamily: font,
+        ),
         titleMedium: TextStyle(
-      fontSize: 18,
-      color: bodyTextColor,
-      fontFamily: font,
-    )),
+          fontSize: 18,
+          color: bodyTextColor,
+          fontFamily: font,
+        )),
     useMaterial3: true,
   );
 }

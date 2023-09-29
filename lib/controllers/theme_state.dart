@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 // Themes
 import '../themes/themes.dart';
 
-class ThemeController with ChangeNotifier {
-  static final _controller = ThemeController._internal();
+class ThemeState with ChangeNotifier {
+  static final _controller = ThemeState._internal();
   // black theme as default
   bool _isDarkModeActive = true;
 
   ThemeData _theme = blackTheme();
   // Using singleton pattern to allow one controller only
-  factory ThemeController() {
+  factory ThemeState() {
     return _controller;
   }
 
@@ -27,5 +27,5 @@ class ThemeController with ChangeNotifier {
   ThemeData get theme => _theme;
   bool get isDarkModeActive => _isDarkModeActive;
 
-  ThemeController._internal();
+  ThemeState._internal();
 }

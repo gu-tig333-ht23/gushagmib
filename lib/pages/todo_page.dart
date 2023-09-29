@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/collection_state.dart';
 import 'add_item_page.dart';
-import '../models/todo_item.dart';
 import '../models/enums.dart';
 import 'package:flutter/foundation.dart';
-import 'toggle_theme.dart';
+// Widgets
+import '../widgets/toggle_theme_widget.dart';
+import '../widgets/reorderable_list_widget.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({
@@ -14,32 +15,10 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var collectionState = context.watch<TaskCollectionState>();
-    var tasks = collectionState.taskList;
-    print(tasks.length);
     return Scaffold(
       appBar: MainPageAppBar(),
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          return Column(
-            // Set a dividing line on top if index is 0 else below.
-            children: index == 0
-                ? <Widget>[
-                    Divider(
-                      height: 1,
-                    ),
-                    TodoTile(item: tasks[index]),
-                    Divider(height: 0),
-                  ]
-                : <Widget>[
-                    TodoTile(item: tasks[index]),
-                    Divider(height: 0),
-                  ],
-          );
-        },
-      ),
-      floatingActionButton: AddTodoItemButton(),
+      body: ReorderableListWidget(),
+      floatingActionButton: GoToAddPageFloatingButton(),
     );
   }
 }
@@ -52,7 +31,7 @@ class MainPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       actions: [
-        ToggleDarkTheme(),
+        ToggleDarkThemeWidget(),
         PopUpMenu(),
       ],
       title: Center(
@@ -108,86 +87,8 @@ class _PopUpMenuState extends State<PopUpMenu> {
   }
 }
 
-// Stateful since TodoTile only needs to manage it's own state.
-class TodoTile extends StatefulWidget {
-  const TodoTile({super.key, required this.item});
-
-  final ToDoItem item;
-
-  @override
-  State<TodoTile> createState() => _TodoTileState();
-}
-
-class _TodoTileState extends State<TodoTile> {
-  @override
-  Widget build(BuildContext context) {
-    final collectionState = context.watch<TaskCollectionState>();
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 5),
-          leading: IconButton(
-            onPressed: () {
-              setState(
-                () {
-                  // The box is tapped, update the variable isDone.
-                  widget.item.updateIsDone();
-                  // Tell the state that an item has been updated and
-                  collectionState.updateTodoItem(widget.item);
-                },
-              );
-            },
-            icon: Icon(widget.item.isDone
-                ? Icons.check_box_outlined
-                : Icons.check_box_outline_blank),
-          ),
-          title: Text(widget.item.getText,
-              // Make a line through the text if it's marked as complete
-              style: Theme.of(context).listTileTheme.titleTextStyle!.copyWith(
-                    decoration: widget.item.isDone
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                  )),
-          trailing: IconButton(
-            onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              // User have clicked on delete button, remove from collection
-              await collectionState.remove(widget.item);
-              // Refetch since
-              await collectionState.fetchTasks();
-
-              final undoDeletionSnackBar = showSnackBar(collectionState);
-
-              messenger.showSnackBar(undoDeletionSnackBar);
-            },
-            icon: Icon(
-              Icons.close,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  SnackBar showSnackBar(TaskCollectionState collectionState) {
-    var removedTask = collectionState.lastRemovedTask;
-    return SnackBar(
-      duration: const Duration(seconds: 2),
-      content: Text("You deleted the task: ${removedTask!.getText}"),
-      action: SnackBarAction(
-        label: 'Undo deletion',
-        onPressed: () async {
-          await collectionState.add(removedTask);
-          await collectionState.fetchTasks();
-        },
-      ),
-    );
-  }
-}
-
-class AddTodoItemButton extends StatelessWidget {
-  const AddTodoItemButton({
+class GoToAddPageFloatingButton extends StatelessWidget {
+  const GoToAddPageFloatingButton({
     super.key,
   });
 
