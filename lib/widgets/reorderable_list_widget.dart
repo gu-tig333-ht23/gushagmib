@@ -20,6 +20,19 @@ class _ReorderableListWidgetState extends State<ReorderableListWidget> {
     var collectionState = context.watch<TaskCollectionState>();
     var tasks = collectionState.taskList;
     return ReorderableListView.builder(
+      proxyDecorator: (child, index, animation) {
+        return AnimatedBuilder(
+          animation: animation,
+          builder: (BuildContext context, Widget? child) {
+            return Material(
+              elevation: 25,
+              shadowColor: Colors.pinkAccent,
+              child: child,
+            );
+          },
+          child: child,
+        );
+      },
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         return Container(
