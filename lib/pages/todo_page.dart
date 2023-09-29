@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 // Widgets
 import '../widgets/toggle_theme_widget.dart';
 import '../widgets/todoTile_widget.dart';
+import '../widgets/reorderable_list_widget.dart';
 
 class MainPage extends StatelessWidget {
   MainPage({
@@ -15,30 +16,9 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var collectionState = context.watch<TaskCollectionState>();
-    var tasks = collectionState.taskList;
     return Scaffold(
       appBar: MainPageAppBar(),
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          return Column(
-            // Set a dividing line on top if index is 0 else below.
-            children: index == 0
-                ? <Widget>[
-                    Divider(
-                      height: 1,
-                    ),
-                    TodoTileWidget(item: tasks[index]),
-                    Divider(height: 0),
-                  ]
-                : <Widget>[
-                    TodoTileWidget(item: tasks[index]),
-                    Divider(height: 0),
-                  ],
-          );
-        },
-      ),
+      body: ReorderableListWidget(),
       floatingActionButton: GoToAddPageFloatingButton(),
     );
   }

@@ -39,7 +39,7 @@ class _TodoTileWidgetState extends State<TodoTileWidget> {
                 ? Icons.check_box_outlined
                 : Icons.check_box_outline_blank),
           ),
-          title: Text(widget.item.getText,
+          title: Text(widget.item.text,
               // Make a line through the text if it's marked as complete
               style: Theme.of(context).listTileTheme.titleTextStyle!.copyWith(
                     decoration: widget.item.isDone
@@ -71,7 +71,7 @@ class _TodoTileWidgetState extends State<TodoTileWidget> {
     var removedTask = collectionState.lastRemovedTask;
     return SnackBar(
       duration: const Duration(seconds: 2),
-      content: Text("You deleted the task: ${removedTask!.getText}"),
+      content: Text("You deleted the task: ${removedTask!.text}"),
       action: SnackBarAction(
         label: 'Undo deletion',
         onPressed: () async {

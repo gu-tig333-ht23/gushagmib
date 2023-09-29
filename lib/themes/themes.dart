@@ -87,6 +87,7 @@ ThemeData ThemeBluePrint(
     Color elevatedIconColor) {
   return ThemeData(
     primaryColor: primaryColour,
+    cardColor: listTileColor,
     scaffoldBackgroundColor: appBackGroundColor,
     fontFamily: font,
     // Appbar theme
@@ -107,7 +108,7 @@ ThemeData ThemeBluePrint(
     switchTheme: SwitchThemeData(
         trackColor: MaterialStateProperty.all<Color>(buttonBackGroundColor)),
     listTileTheme: ListTileThemeData(
-      tileColor: listTileColor,
+      tileColor: appBackGroundColor,
       titleTextStyle: TextStyle(
         color: bodyTextColor,
         fontSize: 18,
