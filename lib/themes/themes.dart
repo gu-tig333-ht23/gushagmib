@@ -184,6 +184,7 @@ ThemeData ThemeBluePrint(
       ),
     ),
     snackBarTheme: SnackBarThemeData(
+      closeIconColor: iconColor,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         side: BorderSide(color: primaryAccentColour, width: 1),
