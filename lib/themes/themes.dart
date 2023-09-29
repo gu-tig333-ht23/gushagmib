@@ -183,6 +183,20 @@ ThemeData ThemeBluePrint(
         foregroundColor: MaterialStateProperty.all<Color>(elevatedIconColor),
       ),
     ),
+    snackBarTheme: SnackBarThemeData(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: primaryAccentColour, width: 1),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      showCloseIcon: true,
+      actionTextColor: Colors.blue,
+      backgroundColor: primaryColour,
+      contentTextStyle: TextStyle(
+        color: textMenuColor,
+        fontFamily: font,
+        fontSize: 16,
+      ),
+    ),
     textTheme: TextTheme(
         titleMedium: TextStyle(
       fontSize: 18,

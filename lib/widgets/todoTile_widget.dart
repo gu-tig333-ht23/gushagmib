@@ -71,7 +71,7 @@ class _TodoTileWidgetState extends State<TodoTileWidget> {
     var removedTask = collectionState.lastRemovedTask;
     return SnackBar(
       duration: const Duration(seconds: 2),
-      content: Text("You deleted the task: ${removedTask!.text}"),
+      content: Text("Deleted: ${removedTask!.text}"),
       action: SnackBarAction(
         label: 'Undo deletion',
         onPressed: () async {
