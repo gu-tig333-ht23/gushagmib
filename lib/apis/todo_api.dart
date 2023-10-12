@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../models/todo_item.dart';
 
 class TodoAPI {
-  static const String _API_KEY = 'abb6cf01-0a78-4af3-a786-9ea8819073fb';
+  static const String _API_KEY = '66ea029b-7c21-4eb0-a8a9-7a412e175c25';
   static const String _ENDPOINT = 'https://todoapp-api.apps.k8s.gu.se';
   static Future<void> add(TodoItem item) async {
     await http.post(
